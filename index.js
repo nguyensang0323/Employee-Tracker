@@ -96,6 +96,104 @@ async function addDepartment() {
   startApp();
 }
 
+async function addRole() {
+  const department = await db.query("SELECT id as value, name FROM department");
+  const answer = await inquirer.prompt([
+    {
+      type: "input",
+      name: "role",
+      message: "What is the name of the new role?",
+    },
+    {
+      type: "input",
+      name: "salary",
+      message: "What is the salary?",
+    },
+    {
+      type: "list",
+      name: "departmentId",
+      message: "What department?",
+      choices: department,
+    },
+  ]);
+
+  await db.query(
+    "INSERT into role (title, salary, department_id) values (?,?,?)",
+    [answer.role, answer.salary, answer.departmentId]
+  );
+
+  console.log("Success, added role!");
+  startApp();
+}
+
+async function addEmployee() {
+  const role = await db.query("SELECT id as value, title as name FROM role");
+  const manager = await db.query(
+    "SELECT id as value, concat(first_name, ' ', last_name) as name from employee"
+  );
+  const answer = await inquirer.prompt([
+    {
+      type: "input",
+      name: "first",
+      message: "What is the employee's first name?",
+    },
+    {
+      type: "input",
+      name: "last",
+      message: "What is the employee's last name?",
+    },
+    {
+      type: "list",
+      name: "roleId",
+      message: "What is the new role?",
+      choices: role,
+    },
+    {
+      type: "list",
+      name: "managerID",
+      message: "Who is the manager?",
+      choices: manager,
+    },
+  ]);
+
+  await db.query(
+    "INSERT into employee (first_name, last_name, role_id, manager_id) values (?,?,?,?)",
+    [answer.first, answer.last, answer.roleId, answer.managerId]
+  );
+
+  console.log("Success, added new Employee!");
+  startApp();
+}
+
+async function updateEmployee() {
+  const role = await db.query("SELECT id as value, title as name FROM role");
+  const employee = await db.query(
+    "SELECT id as value, concat(first_name, ' ', last_name) as name from employee"
+  );
+  const answer = await inquirer.prompt([
+    {
+      type: "list",
+      name: "employeeId",
+      message: "Who is the employee?",
+      choices: employee,
+    },
+    {
+      type: "list",
+      name: "roleId",
+      message: "What is the new role?",
+      choices: role,
+    },
+  ]);
+
+  await db.query("UPDATE employee SET role_id = ? WHERE id = ?", [
+    answer.roleId,
+    answer.employeeId,
+  ]);
+
+  console.log("Success, updated Employee!");
+  startApp();
+}
+
 // async function
 
 // const roleResult = await db.query('select id as value, title as name from role')
