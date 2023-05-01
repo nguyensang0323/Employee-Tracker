@@ -13,3 +13,4 @@ This application employed technologies and npm packages such as JavaScript, Node
 - Next, the user can add either a department, role, or employee. The user can also update an employees' role.
 
 ## Walkthrough Video
+https://drive.google.com/file/d/1XDCZW1qPCa4tyNyvg25nx4zKABMQY6LM/view
